@@ -1,7 +1,6 @@
   [build]
   publish = "public/" # <-- ADD THIS LINE
   command = "pip install -r requirements.txt"
-  functions = "netlify/functions/"
   python_version = "3.11.9"
   
 [[redirects]]
@@ -12,7 +11,9 @@
 [functions]
   included_files = ["app/**", "documents/**", ".env"]
 
-
+[functions]
+  # The path to your functions folder
+  directory = "netlify/functions/"
 
 
 
