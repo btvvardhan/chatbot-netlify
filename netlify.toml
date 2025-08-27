@@ -10,9 +10,6 @@
 
 [functions]
   included_files = ["app/**", "documents/**", ".env"]
-
-[functions]
-  # The path to your functions folder
   directory = "netlify/functions/"
 
 
