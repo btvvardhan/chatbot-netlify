@@ -1,7 +1,7 @@
   [build]
   publish = "public/" # <-- ADD THIS LINE
   command = "pip install -r requirements.txt"
-  functions = "api/"
+  functions = "netlify/functions/"
   python_version = "3.11.9"
   
 [[redirects]]
