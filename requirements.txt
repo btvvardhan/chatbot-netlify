@@ -1,0 +1,7 @@
+python-dotenv
+PyPDF2
+google-generativeai
+numpy
+faiss-cpu
+Flask
+Flask-Cors

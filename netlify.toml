@@ -1,0 +1,19 @@
+  [build]
+  publish = "public/" # <-- ADD THIS LINE
+  command = "pip install -r requirements.txt"
+  functions = "api/"
+  python_version = "3.11"
+  
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  included_files = ["app/**", "documents/**", ".env"]
+
+
+
+
+
+# ... keep the rest of the file the same ...

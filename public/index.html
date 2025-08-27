@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; color: #333; max-width: 768px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { text-align: center; color: #1a1a1a; }
+        textarea { width: 100%; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        button:disabled { background-color: #aaa; }
+        #response { margin-top: 20px; padding: 15px; background-color: #fff; border-radius: 8px; border: 1px solid #e0e0e0; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+    <h1>Ask Your Documents a Question</h1>
+
+    <textarea id="question" rows="4" placeholder="e.g., What are the key technical skills listed on this resume?"></textarea>
+    <button id="ask-button" onclick="askQuestion()">Ask</button>
+    
+    <div id="response">
+        The answer will appear here...
+    </div>
+
+    <script>
+        // This function is called when the button is clicked
+        async function askQuestion() {
+            const questionInput = document.getElementById('question');
+            const responseDiv = document.getElementById('response');
+            const askButton = document.getElementById('ask-button');
+
+            const question = questionInput.value;
+            if (!question) {
+                alert('Please enter a question.');
+                return;
+            }
+
+            // --- This is where the magic happens! ---
+            // 1. Show a loading state
+            responseDiv.innerText = "Thinking...";
+            askButton.disabled = true;
+
+            try {
+                // 2. Send the question to our Netlify function backend
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        query: question,
+                        system_prompt: "You are a helpful assistant. Answer the user's question based on the provided documents."
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 3. Get the JSON answer and display it
+                const data = await response.json();
+                responseDiv.innerText = data.response;
+
+            } catch (error) {
+                responseDiv.innerText = "Sorry, an error occurred: " + error.message;
+            } finally {
+                // 4. Re-enable the button
+                askButton.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
